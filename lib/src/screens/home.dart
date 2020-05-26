@@ -58,10 +58,7 @@ class CategoriesScreen extends StatelessWidget {
         ),
       );
 
-  Padding _buildTile(context, category) {
-    return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: GestureDetector(
+  Widget _buildTile(context, category) => GestureDetector(
         onTap: () => Navigator.push(
             context,
             MaterialPageRoute(
@@ -74,14 +71,11 @@ class CategoriesScreen extends StatelessWidget {
                 child: Text(
               category,
               textAlign: TextAlign.center,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline5
-                  .copyWith(color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+              ),
             )),
           ),
         ),
-      ),
-    );
-  }
+      );
 }

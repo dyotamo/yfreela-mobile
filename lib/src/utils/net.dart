@@ -17,4 +17,10 @@ Future<List> getFreelas(category) async {
       .toList();
 }
 
-Future<List> searchFreelas(category) async => await getFreelas(category);
+Future<List> searchFreelas(category) async {
+  var body =
+      (await http.get('https://yfreela.herokuapp.com/search/$category')).body;
+  return ((jsonDecode(body)) as List)
+      .map((json) => Freela.fromJson(json))
+      .toList();
+}
