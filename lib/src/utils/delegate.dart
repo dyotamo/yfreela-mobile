@@ -30,7 +30,11 @@ class FreelaSearch extends SearchDelegate<Freela> {
         } else if (snapshot.hasError)
           return Padding(
             padding: const EdgeInsets.all(15.0),
-            child: Center(child: Text(snapshot.error.toString())),
+            child: Center(
+                child: Text(
+              snapshot.error.toString(),
+              textAlign: TextAlign.center,
+            )),
           );
         return Center(child: CircularProgressIndicator());
       });
@@ -44,15 +48,13 @@ class FreelaSearch extends SearchDelegate<Freela> {
             .toList(),
       );
 
-  Widget _buildTile(context, Freela freela) {
-    return ListTile(
-      onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => DetailsScreen(freela: freela))),
-      leading: CircleAvatar(backgroundImage: NetworkImage(freela.image)),
-      title: Text(freela.name),
-      subtitle: Text(freela.city),
-    );
-  }
+  Widget _buildTile(context, Freela freela) => ListTile(
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DetailsScreen(freela: freela))),
+        leading: CircleAvatar(backgroundImage: NetworkImage(freela.image)),
+        title: Text(freela.name),
+        subtitle: Text(freela.city),
+      );
 }

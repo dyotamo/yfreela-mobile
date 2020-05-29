@@ -19,47 +19,47 @@ class DetailsScreen extends StatelessWidget {
 
   Widget _buildDetails(context) {
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              ClipOval(
+      child: Center(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: ClipOval(
                 child: Image.network(freela.image),
               ),
-              _PaddedText(
-                freela.name,
-                Theme.of(context).textTheme.headline5,
-              ),
-              _PaddedText('(${freela.city})'),
-              RatingBar.readOnly(
-                size: 30.0,
-                filledColor: Colors.green,
-                initialRating: freela.rating,
-                filledIcon: Icons.star,
-                emptyIcon: Icons.star_border,
-              ),
-              Divider(),
-              ListTile(
-                leading: Icon(Icons.category),
-                title: Text(freela.category),
-              ),
-              ListTile(
-                onTap: () => _buildActionSheet(context),
-                leading: Icon(Icons.phone),
-                title: Text(freela.phone),
-              ),
-              ListTile(
-                onTap: () => launch('mailto:${freela.email}'),
-                leading: Icon(Icons.email),
-                title: Text(freela.email),
-              ),
-              ListTile(
-                leading: Icon(Icons.description),
-                title: Text(freela.bio),
-              )
-            ],
-          ),
+            ),
+            _PaddedText(
+              freela.name,
+              Theme.of(context).textTheme.headline5,
+            ),
+            _PaddedText('(${freela.city})'),
+            RatingBar.readOnly(
+              size: 30.0,
+              filledColor: Colors.green,
+              initialRating: freela.rating,
+              filledIcon: Icons.star,
+              emptyIcon: Icons.star_border,
+            ),
+            Divider(),
+            ListTile(
+              leading: Icon(Icons.category),
+              title: Text(freela.category),
+            ),
+            ListTile(
+              onTap: () => _buildActionSheet(context),
+              leading: Icon(Icons.phone),
+              title: Text(freela.phone),
+            ),
+            ListTile(
+              onTap: () => launch('mailto:${freela.email}'),
+              leading: Icon(Icons.email),
+              title: Text(freela.email),
+            ),
+            ListTile(
+              leading: Icon(Icons.description),
+              title: Text(freela.bio),
+            )
+          ],
         ),
       ),
     );

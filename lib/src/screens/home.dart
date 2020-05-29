@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:free/src/screens/freelas.dart';
+import 'package:free/src/screens/login.dart';
+import 'package:free/src/utils/constants.dart';
 import 'package:free/src/utils/delegate.dart';
 import 'package:free/src/utils/net.dart';
 
@@ -22,7 +24,8 @@ class CategoriesScreen extends StatelessWidget {
             icon: Icon(Icons.search),
             onPressed: () =>
                 showSearch(context: context, delegate: FreelaSearch()),
-          )
+          ),
+          _buildPopupMenu(context)
         ],
       ),
       body: FutureBuilder<List>(
@@ -32,9 +35,12 @@ class CategoriesScreen extends StatelessWidget {
             return _buildGrid(context, snapshot.data);
           else if (snapshot.hasError)
             return Center(
-                child: Text(
-              snapshot.error.toString(),
-              textAlign: TextAlign.center,
+                child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                snapshot.error.toString(),
+                textAlign: TextAlign.center,
+              ),
             ));
           return Center(child: CircularProgressIndicator());
         },
@@ -44,7 +50,7 @@ class CategoriesScreen extends StatelessWidget {
 
   Widget _buildGrid(context, List categories) => OrientationBuilder(
         builder: (context, orientation) => Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(5.0),
           child: StaggeredGridView.countBuilder(
             crossAxisCount: (orientation == Orientation.landscape) ? 6 : 4,
             itemCount: categories.length,
@@ -52,8 +58,8 @@ class CategoriesScreen extends StatelessWidget {
                 _buildTile(context, categories[index]),
             staggeredTileBuilder: (int index) =>
                 StaggeredTile.count(2, index.isEven ? 2 : 1),
-            mainAxisSpacing: 4.0,
-            crossAxisSpacing: 4.0,
+            mainAxisSpacing: 2.0,
+            crossAxisSpacing: 2.0,
           ),
         ),
       );
@@ -64,7 +70,7 @@ class CategoriesScreen extends StatelessWidget {
             MaterialPageRoute(
                 builder: (context) => FreelasScreen(category: category))),
         child: Card(
-          elevation: 8.0,
+          elevation: 5.0,
           child: Container(
             color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
             child: Center(
@@ -77,5 +83,22 @@ class CategoriesScreen extends StatelessWidget {
             )),
           ),
         ),
+      );
+
+  Widget _buildPopupMenu(context) => PopupMenuButton(
+        itemBuilder: (context) => [
+          PopupMenuItem(
+            value: Choices.MY_PROFILE,
+            child: Text('Login'),
+          ),
+        ],
+        onSelected: (value) {
+          switch (value) {
+            case Choices.LOGIN:
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()));
+              break;
+          }
+        },
       );
 }

@@ -20,3 +20,7 @@ class Freela {
     rating = 3.5;
   }
 }
+
+class Login {
+  String email, password;
+}
