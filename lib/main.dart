@@ -10,7 +10,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'YFree',
-      home: CategoriesScreen(title: 'Selecione a Categoria'),
+      home: CategoriesScreen(title: 'Encontre aqui!'),
+      theme: ThemeData(primarySwatch: Colors.red),
     );
   }
 }

@@ -2,7 +2,8 @@ import 'package:simple_gravatar/simple_gravatar.dart';
 
 class Freela {
   String name, city, bio, email, phone, category;
-  double rating;
+  int id, likes, dislikes;
+  bool liked, disliked;
 
   String get image => Gravatar(email).imageUrl(
       size: 150,
@@ -11,16 +12,16 @@ class Freela {
       fileExtension: true);
 
   Freela.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     name = json['name'];
     city = json['city'];
     bio = json['bio'];
     email = json['email'];
     phone = json['phone'];
     category = json['category'];
-    rating = 3.5;
+    likes = json['likes'];
+    dislikes = json['dislikes'];
+    liked = json['liked'];
+    disliked = json['disliked'];
   }
-}
-
-class Login {
-  String email, password;
 }

@@ -44,10 +44,8 @@ class FreelasScreen extends StatelessWidget {
       );
 
   Widget _buildTile(context, Freela freela) => ListTile(
-        onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DetailsScreen(freela: freela))),
+        onTap: () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => DetailsScreen(freela))),
         leading: CircleAvatar(backgroundImage: NetworkImage(freela.image)),
         title: Text(freela.name),
         subtitle: Text(freela.city),

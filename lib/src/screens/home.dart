@@ -1,13 +1,11 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:free/src/screens/freelas.dart';
-import 'package:free/src/screens/login.dart';
-import 'package:free/src/utils/constants.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:free/src/models.dart';
+import 'package:free/src/screens/details.dart';
 import 'package:free/src/utils/delegate.dart';
 import 'package:free/src/utils/net.dart';
+import 'package:grouped_list/grouped_list.dart';
 
 class CategoriesScreen extends StatelessWidget {
   CategoriesScreen({Key key, this.title}) : super(key: key);
@@ -25,80 +23,53 @@ class CategoriesScreen extends StatelessWidget {
             onPressed: () =>
                 showSearch(context: context, delegate: FreelaSearch()),
           ),
-          _buildPopupMenu(context)
         ],
       ),
       body: FutureBuilder<List>(
-        future: getCategories(),
+        future: allFreelas(),
         builder: (context, snapshot) {
           if (snapshot.hasData)
-            return _buildGrid(context, snapshot.data);
+            return _buildList(context, snapshot.data);
           else if (snapshot.hasError)
             return Center(
-                child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Text(
-                snapshot.error.toString(),
-                textAlign: TextAlign.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    MaterialCommunityIcons.access_point_network_off,
+                    size: 75.0,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Text('Problemas no acesso aos dados.',
+                        textAlign: TextAlign.center),
+                  ),
+                ],
               ),
-            ));
+            );
           return Center(child: CircularProgressIndicator());
         },
       ),
     );
   }
 
-  Widget _buildGrid(context, List categories) => OrientationBuilder(
-        builder: (context, orientation) => Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: StaggeredGridView.countBuilder(
-            crossAxisCount: (orientation == Orientation.landscape) ? 6 : 4,
-            itemCount: categories.length,
-            itemBuilder: (BuildContext context, int index) =>
-                _buildTile(context, categories[index]),
-            staggeredTileBuilder: (int index) =>
-                StaggeredTile.count(2, index.isEven ? 2 : 1),
-            mainAxisSpacing: 2.0,
-            crossAxisSpacing: 2.0,
-          ),
-        ),
-      );
-
-  Widget _buildTile(context, category) => GestureDetector(
-        onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => FreelasScreen(category: category))),
-        child: Card(
-          elevation: 5.0,
-          child: Container(
-            color: Colors.primaries[Random().nextInt(Colors.primaries.length)],
-            child: Center(
-                child: Text(
+  Widget _buildList(context, freelas) => GroupedListView<Freela, String>(
+      elements: freelas,
+      groupBy: (question) => question.category,
+      groupSeparatorBuilder: (category) => Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text(
               category,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            )),
+              style: Theme.of(context).textTheme.headline6,
+            ),
           ),
-        ),
-      );
+      itemBuilder: (context, question) => _buildTile(context, question));
 
-  Widget _buildPopupMenu(context) => PopupMenuButton(
-        itemBuilder: (context) => [
-          PopupMenuItem(
-            value: Choices.MY_PROFILE,
-            child: Text('Login'),
-          ),
-        ],
-        onSelected: (value) {
-          switch (value) {
-            case Choices.LOGIN:
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()));
-              break;
-          }
-        },
+  Widget _buildTile(context, Freela freela) => ListTile(
+        onTap: () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => DetailsScreen(freela))),
+        leading: CircleAvatar(backgroundImage: NetworkImage(freela.image)),
+        title: Text(freela.name),
+        subtitle: Text(freela.city),
       );
 }
